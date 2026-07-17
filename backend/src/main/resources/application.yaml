@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: issura
+  config:
+    import: "optional:file:../.env[.properties]"
+  datasource:
+    url: "jdbc:mariadb://localhost:${MARIADB_PORT:3306}/${MARIADB_DATABASE:issura}"
+    username: "${MARIADB_USER:issura}"
+    password: "${MARIADB_PASSWORD:}"

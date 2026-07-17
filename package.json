@@ -1,0 +1,16 @@
+{
+  "name": "issura-workspace",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": "22.23.1",
+    "npm": "10.9.8"
+  },
+  "packageManager": "npm@10.9.8",
+  "scripts": {
+    "openspec": "openspec"
+  },
+  "devDependencies": {
+    "@fission-ai/openspec": "1.6.0"
+  }
+}

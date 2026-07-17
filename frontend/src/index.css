@@ -1,0 +1,89 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+@import "./design-theme.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Inter Variable", sans-serif;
+  --font-heading: "Inter Variable", sans-serif;
+  --font-mono: "JetBrains Mono Variable", monospace;
+  --color-foreground: var(--color-text);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-text);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-text);
+  --color-primary-foreground: var(--color-on-primary);
+  --color-secondary-foreground: var(--color-on-secondary);
+  --color-accent-foreground: var(--color-on-accent);
+  --color-muted-foreground: var(--color-muted);
+  --color-destructive: var(--color-danger);
+  --color-destructive-foreground: var(--color-on-danger);
+  --color-input: var(--color-border);
+  --color-ring: var(--color-primary);
+  --color-chart-1: var(--color-primary);
+  --color-chart-2: var(--color-accent);
+  --color-chart-3: var(--color-warning);
+  --color-chart-4: var(--color-success);
+  --color-chart-5: var(--color-danger);
+  --color-sidebar: var(--color-surface);
+  --color-sidebar-foreground: var(--color-text);
+  --color-sidebar-primary: var(--color-primary);
+  --color-sidebar-primary-foreground: var(--color-on-primary);
+  --color-sidebar-accent: var(--color-background);
+  --color-sidebar-accent-foreground: var(--color-text);
+  --color-sidebar-border: var(--color-border);
+  --color-sidebar-ring: var(--color-primary);
+  --radius-xl: var(--radius-lg);
+  --radius-2xl: var(--radius-lg);
+  --radius-3xl: var(--radius-lg);
+  --radius-4xl: var(--radius-lg);
+}
+
+:root {
+  --text: var(--color-muted);
+  --text-h: var(--color-text);
+  --bg: var(--color-background);
+  --border: var(--color-border);
+  --code-bg: var(--color-surface);
+  --accent-bg: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  --accent-border: color-mix(in srgb, var(--color-primary) 50%, transparent);
+  --social-bg: color-mix(in srgb, var(--color-surface) 50%, transparent);
+  --shadow:
+    rgb(15 23 42 / 10%) 0 10px 15px -3px,
+    rgb(15 23 42 / 5%) 0 4px 6px -2px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    min-width: 320px;
+    min-height: 100svh;
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+  }
+
+  #root {
+    min-height: 100svh;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  code {
+    @apply font-mono;
+  }
+}
