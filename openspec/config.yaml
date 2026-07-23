@@ -2,10 +2,10 @@ schema: spec-driven
 
 context: |
   Documentation and all OpenSpec artifacts must be written in English.
-  Stack: Java 25, Spring Boot 4.1.0, Spring MVC, Thymeleaf, Spring Security, and MySQL.
-  Build: Gradle Wrapper 9.5.1.
-  Tests: JUnit 5. Fast verification: sh ./gradlew test. Full verification: sh ./gradlew build.
-  Unit-test domain and application logic. Do not assert rendered HTML, CSS classes, or Thymeleaf fragment structure. Verify template-only and CSS-only changes with the build, design lint, and a browser smoke check. Keep integration tests only for critical framework contracts that unit tests cannot prove, especially security. Preserve existing public behavior unless a spec changes it.
+  Stack: Java 21, Spring Boot 4.1.0, Spring MVC, Spring Security, Spring JDBC, Spring Modulith 2.1.0, springdoc-openapi 3.0.3, React 19, TypeScript 6, Vite 8, Tailwind CSS 4, shadcn/ui, and MariaDB 12.3.
+  Toolchain: Maven Wrapper 3.9.16 for the backend; Node.js 22.23.1 and npm 10.9.8 for the root and frontend.
+  Verification: `cd backend && ./mvnw test` for backend tests, `cd backend && ./mvnw verify` for the backend build, `cd frontend && npm run lint` for frontend linting, `cd frontend && npm run build` for frontend type checking and build, and `npm run openspec -- doctor` for OpenSpec.
+  Unit-test domain and application logic. Do not assert rendered markup, CSS classes, or component structure for visual-only changes. Verify TSX-only and CSS-only changes with frontend lint, build, design lint, and a browser smoke check. Keep integration tests only for critical framework contracts that unit tests cannot prove, especially security. Preserve existing public behavior unless a spec changes it.
 
 rules:
   proposal:

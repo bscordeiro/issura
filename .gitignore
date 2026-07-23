@@ -37,3 +37,4 @@ node_modules/
 .pi-subagents/
 .pi
 .claude
+**.log
