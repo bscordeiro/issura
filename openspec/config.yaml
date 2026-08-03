@@ -1,32 +1,33 @@
 schema: spec-driven
 
 context: |
-  Documentation and all OpenSpec artifacts must be written in English.
-  Stack: Java 21, Spring Boot 4.1.0, Spring MVC, Spring Security, Spring JDBC, Spring Modulith 2.1.0, springdoc-openapi 3.0.3, React 19, TypeScript 6, Vite 8, Tailwind CSS 4, shadcn/ui, and MariaDB 12.3.
-  Toolchain: Maven Wrapper 3.9.16 for the backend; Node.js 22.23.1 and npm 10.9.8 for the root and frontend.
-  Verification: `cd backend && ./mvnw test` for backend tests, `cd backend && ./mvnw verify` for the backend build, `cd frontend && npm run lint` for frontend linting, `cd frontend && npm run build` for frontend type checking and build, and `npm run openspec -- doctor` for OpenSpec.
-  Unit-test domain and application logic. Do not assert rendered markup, CSS classes, or component structure for visual-only changes. Verify TSX-only and CSS-only changes with frontend lint, build, design lint, and a browser smoke check. Keep integration tests only for critical framework contracts that unit tests cannot prove, especially security. Preserve existing public behavior unless a spec changes it.
+  All OpenSpec artifacts must be written in English.
+  Read AGENTS.md, CONTEXT.md, and CONVENTIONS.md before creating artifacts.
+  Frontend visual changes must follow frontend/DESIGN.md.
+  The application is a modular monolith. Backend business code belongs to capability packages, not global technical-layer packages.
+  Preserve existing public behavior unless a delta spec explicitly changes it.
+  Use the narrowest relevant verification command for each task. Final verification uses `npm run check`.
 
 rules:
   proposal:
     - "Use the schema headings; add a concise ## Non-Goals section after ## What Changes."
     - "In ## Why, state the user or business problem and one observable success outcome."
-    - "In ## Capabilities, name only new or modified spec capabilities; do not describe implementation."
-    - "Keep scope small enough for one reversible change. In ## Impact, state compatibility, migration, and documentation effects when applicable."
+    - "List only user-observable contracts as capabilities; implementation-only work is not a capability."
+    - "Keep the change small and reversible. In ## Impact, state compatibility, migration, security, and documentation effects when applicable."
   specs:
-    - "For every ADDED or MODIFIED Requirement, use this order: one normative MUST sentence, **Priority:** P0/P1/P2, **Rationale:** one sentence, then scenarios."
-    - "Use P0 for security, data-loss, compliance, or unusable-flow risk; P1 for release-critical behavior; P2 for deferrable behavior."
+    - "Every ADDED or MODIFIED requirement uses one normative MUST sentence followed by observable scenarios."
     - "Every scenario uses **GIVEN**, **WHEN**, and **THEN** in that order; use **AND** only to continue the preceding clause."
-    - "Cover the primary flow and each relevant boundary or rejected behavior with observable outcomes."
+    - "Cover the primary flow and material boundary, rejection, and error behavior; avoid combinatorial variants."
     - "For API errors, define HTTP status, stable code, and consumer-safe message; never expose internal causes."
   design:
-    - "Keep the schema headings and add ## Test Strategy after ## Risks / Trade-offs; state behavior, test level, and verification command."
-    - "Include one Mermaid diagram only when it clarifies a non-trivial boundary, data flow, or integration; accompany it with concise prose."
-    - "For every material decision, state decision, rationale, alternatives considered, and consequence."
-    - "Note security or privacy impact when auth, secrets, user input, or personal data are involved."
+    - "Record only material technical decisions; for each, state the decision, rationale, rejected alternative, and consequence."
+    - "Add ## Test Strategy after ## Risks / Trade-offs; state behavior, test level, and verification command."
+    - "Include Mermaid only when it clarifies a non-trivial seam, dependency, or data flow; accompany it with concise prose."
+    - "State security and privacy impact when auth, secrets, user input, or personal data are involved."
   tasks:
-    - "Reference the capability and scenario each task delivers."
-    - "For each logic-bearing behavior, order tasks as RED (write a failing unit test and command expected to fail), GREEN (minimum implementation and same command expected to pass), then REFACTOR only when a real smell exists."
-    - "For template-only or CSS-only changes, use the build, design lint, and a browser smoke check instead of assertions against rendered HTML, CSS classes, or fragment structure."
-    - "Include the exact verification command and expected result in every task; add a final full-suite verification task."
-    - "Mark a task complete only after its expected command output was read."
+    - "Reference the requirement and scenario delivered by each behavior-bearing task."
+    - "Use one checkbox per behavior or technical increment. For new logic, perform RED -> GREEN within that task."
+    - "Add a separate REFACTOR task only when an identified smell requires structural work under green tests."
+    - "State the narrowest verification command and expected observable result for each task."
+    - "For visual-only changes, use lint, build, design lint, and a browser smoke check instead of markup or CSS-structure assertions."
+    - "End with `npm run check`; complete a task only after reading its command output."

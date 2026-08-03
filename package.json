@@ -1,16 +1,31 @@
 {
-  "name": "issura-workspace",
-  "private": true,
-  "version": "0.0.0",
-  "engines": {
-    "node": "22.23.1",
-    "npm": "10.9.8"
-  },
-  "packageManager": "npm@10.9.8",
-  "scripts": {
-    "openspec": "openspec"
-  },
-  "devDependencies": {
-    "@fission-ai/openspec": "1.6.0"
-  }
+	"name": "issura-workspace",
+	"private": true,
+	"version": "0.0.0",
+	"engines": {
+		"node": "22.23.1",
+		"npm": "10.9.8"
+	},
+	"packageManager": "npm@10.9.8",
+	"scripts": {
+		"audit": "npm run audit:npm && npm run audit:maven",
+		"audit:maven": "cd backend && ./mvnw org.cyclonedx:cyclonedx-maven-plugin:2.9.3:makeBom -DoutputFormat=json -DincludeTestScope=true -Dcyclonedx.skipAttach=true && cd .. && docker run --rm -v \"${PWD}/backend/target/bom.json:/bom.json:ro\" ghcr.io/google/osv-scanner:v2.4.0@sha256:5116601dedc01c1c580eb92371883ec052fc4c13c3fbc109d621a63ac416d475 scan source -L /bom.json",
+		"audit:npm": "npm audit --audit-level=high && npm --prefix frontend audit --audit-level=high",
+		"build:frontend": "npm --prefix frontend run build",
+		"check": "npm run lint && npm run audit && npm run sast && npm run test",
+		"check:backend": "cd backend && ./mvnw io.spring.javaformat:spring-javaformat-maven-plugin:validate clean verify",
+		"check:compose": "docker compose config --quiet",
+		"check:frontend": "npm --prefix frontend run lint && npm run build:frontend",
+		"format": "cd backend && ./mvnw spring-javaformat:apply && cd .. && prettier --write .",
+		"format:check": "cd backend && ./mvnw spring-javaformat:validate && cd .. && prettier --check .",
+		"lint": "npm run format:check && npm --prefix frontend run lint",
+		"openspec": "openspec",
+		"sast": "docker run --rm -v \"${PWD}:/src:ro\" semgrep/semgrep:1.172.0@sha256:65dcd4408adda7c183a6b4550cb1e9b19f7f627a6fbb7e0559bd466bedc44d7b semgrep scan --config p/default --error --metrics=off --no-git-ignore /src/backend/src/main /src/frontend/src",
+		"test": "npm run check:compose && npm run test:backend && npm run build:frontend && npm run openspec -- doctor",
+		"test:backend": "cd backend && ./mvnw clean verify"
+	},
+	"devDependencies": {
+		"@fission-ai/openspec": "1.6.0",
+		"prettier": "3.9.6"
+	}
 }

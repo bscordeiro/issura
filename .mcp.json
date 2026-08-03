@@ -1,13 +1,9 @@
 {
-  "mcpServers": {
-    "serena": {
-      "command": "serena",
-      "args": [
-        "start-mcp-server",
-        "--context=ide",
-        "--project-from-cwd"
-      ],
-      "directTools": true
-    }
-  }
+	"mcpServers": {
+		"serena": {
+			"command": "serena",
+			"args": ["start-mcp-server", "--context=ide", "--project-from-cwd"],
+			"directTools": true
+		}
+	}
 }

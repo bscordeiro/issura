@@ -29,8 +29,12 @@
 	<properties>
 		<java.version>21</java.version>
 		<archunit.version>1.4.2</archunit.version>
+		<!-- Security patches newer than Spring Boot 4.1.0's managed Jackson baselines. -->
+		<jackson-2-bom.version>2.21.5</jackson-2-bom.version>
+		<jackson-bom.version>3.1.5</jackson-bom.version>
 		<spring-modulith.version>2.1.0</spring-modulith.version>
 		<springdoc-openapi.version>3.0.3</springdoc-openapi.version>
+		<spring-javaformat.version>0.0.47</spring-javaformat.version>
 	</properties>
 
 	<dependencyManagement>
@@ -104,6 +108,11 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<version>${spring-javaformat.version}</version>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

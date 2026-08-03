@@ -18,17 +18,15 @@ class ArchitectureTests {
 	private static final String ROOT_PACKAGE = "com.github.bscordeiro.issura";
 
 	@ArchTest
-	static final ArchRule applicationEntryPointStaysInRootPackage = classes()
-		.that().areAnnotatedWith(SpringBootApplication.class)
-		.should().resideInAPackage(ROOT_PACKAGE);
+	static final ArchRule applicationEntryPointStaysInRootPackage = classes().that()
+		.areAnnotatedWith(SpringBootApplication.class)
+		.should()
+		.resideInAPackage(ROOT_PACKAGE);
 
 	@ArchTest
-	static final ArchRule globalTechnicalPackagesStayEmpty = noClasses()
-		.should().resideInAnyPackage(
-			ROOT_PACKAGE + ".controller..",
-			ROOT_PACKAGE + ".mapper..",
-			ROOT_PACKAGE + ".repository..",
-			ROOT_PACKAGE + ".service..")
+	static final ArchRule globalTechnicalPackagesStayEmpty = noClasses().should()
+		.resideInAnyPackage(ROOT_PACKAGE + ".controller..", ROOT_PACKAGE + ".mapper..", ROOT_PACKAGE + ".repository..",
+				ROOT_PACKAGE + ".service..")
 		.because("business code belongs to capability packages");
 
 	@Test

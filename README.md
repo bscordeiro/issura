@@ -2,16 +2,16 @@
 
 Monorepo com backend Java/Spring Boot, frontend React/TypeScript e MariaDB para desenvolvimento local.
 
-## Stack e versões
+## Stack
 
-- Java 21
-- Maven Wrapper 3.9.16
-- Node.js 22.23.1 (`.nvmrc`)
-- npm 10.9.8
-- OpenSpec 1.6.0, instalado localmente na raiz
-- Spring Boot 4.1.0, Spring MVC, Spring Security e Spring JDBC
-- React 19, TypeScript 6, Vite 8, Tailwind CSS v4 e shadcn/ui
-- MariaDB 12.3 via Docker Compose
+- Backend: Java 21, Spring Boot, Spring Modulith, Spring MVC, Spring Security,
+  Spring JDBC e springdoc-openapi.
+- Frontend: React, TypeScript, Vite, Tailwind CSS e shadcn/ui.
+- Data: MariaDB via Docker Compose.
+- Workflow: Maven Wrapper, npm, OpenSpec, Spring Java Format e Prettier.
+
+As versões exatas das dependências estão fixadas em `backend/pom.xml`,
+`package.json`, `frontend/package.json`, seus lockfiles, `.nvmrc` e `compose.yaml`.
 
 ## Pré-requisitos
 
@@ -43,9 +43,7 @@ Instale as ferramentas da raiz e as dependências do frontend:
 
 ```bash
 npm ci
-cd frontend
-npm ci
-cd ..
+npm --prefix frontend ci
 ```
 
 ## Arquivo `.env` raiz
@@ -59,13 +57,13 @@ O mesmo `.env` atende todo o ambiente local:
 
 Variáveis disponíveis:
 
-| Variável | Uso |
-| --- | --- |
-| `MARIADB_DATABASE` | Nome do banco da aplicação |
-| `MARIADB_USER` | Usuário da aplicação |
-| `MARIADB_PASSWORD` | Senha do usuário da aplicação |
+| Variável                | Uso                                       |
+| ----------------------- | ----------------------------------------- |
+| `MARIADB_DATABASE`      | Nome do banco da aplicação                |
+| `MARIADB_USER`          | Usuário da aplicação                      |
+| `MARIADB_PASSWORD`      | Senha do usuário da aplicação             |
 | `MARIADB_ROOT_PASSWORD` | Senha administrativa usada pelo container |
-| `MARIADB_PORT` | Porta local publicada pelo MariaDB |
+| `MARIADB_PORT`          | Porta local publicada pelo MariaDB        |
 
 Em ambientes implantados, forneça variáveis pelo mecanismo de segredos da plataforma em vez de distribuir arquivos `.env`.
 
@@ -113,54 +111,74 @@ docker compose down
 
 ## Verificação
 
-Execute checks a partir da raiz:
+Execute todas as verificações usadas pela CI a partir da raiz:
 
 ```bash
-docker compose config --quiet
+npm run check
+```
 
-cd backend
-./mvnw clean verify
-cd ..
+O comando executa quatro gates, na mesma ordem usada pela CI:
 
-cd frontend
-npm run lint
-npm run build
-cd ..
+```text
+lint → audit → sast → test
+```
 
-npm run openspec -- doctor
+- `lint`: Spring Java Format, Prettier e ESLint.
+- `audit`: `npm audit` para os lockfiles Node e OSV-Scanner sobre um SBOM
+  CycloneDX do grafo Maven.
+- `sast`: Semgrep sobre o código Java e TypeScript.
+- `test`: configuração do Compose, testes e pacote backend, build frontend e
+  OpenSpec Doctor.
+
+OSV-Scanner e Semgrep executam em imagens Docker fixadas por versão e digest em
+`package.json`; a primeira verificação baixa essas imagens. Os testes bootstrap
+do backend não dependem de MariaDB: a autoconfiguração do datasource é excluída
+somente no ambiente de teste.
+
+Para aplicar a formatação determinística:
+
+```bash
+npm run format
 ```
 
 ## OpenSpec
 
-OpenSpec é dependência de desenvolvimento da raiz, fixada em `1.6.0`. Instalação global não é necessária.
+OpenSpec é uma dependência de desenvolvimento local da raiz, fixada em
+`package.json`; instalação global não faz parte do fluxo.
 
-Confirme a versão:
+Use OpenSpec quando a mudança envolver comportamento observável intencional,
+contrato HTTP ou entre módulos, persistência ou migração de dados, segurança,
+integração externa, decisão arquitetural material ou trabalho em várias sessões.
 
-```bash
-npm run openspec -- --version
-```
+Uma mudança direta sem OpenSpec é permitida somente quando comportamento e
+contratos públicos permanecem inalterados, não há migração nem decisão material
+de segurança ou arquitetura, e a alteração cabe em uma revisão pequena. Uma
+correção que restaura uma especificação existente pode seguir diretamente com
+teste de regressão; use OpenSpec quando o comportamento esperado precisar ser
+decidido ou alterado.
 
-Configure integrações locais para Pi e Claude Code quando necessário:
-
-```bash
-npm run openspec -- init --tools pi,claude
-```
-
-Após atualizar deliberadamente a dependência no `package.json`, regenere instruções das ferramentas:
-
-```bash
-npm run openspec -- update
-```
-
-Mudanças seguem o fluxo definido em `openspec/config.yaml`. Para iniciar uma proposta no assistente:
+Para iniciar uma mudança material no assistente:
 
 ```text
 /opsx:propose "change description"
 ```
 
+Comandos de manutenção:
+
+```bash
+npm run openspec -- --version
+npm run openspec -- init --tools pi,claude
+npm run openspec -- update
+```
+
+O fluxo estável permanece `spec-driven`, configurado em
+`openspec/config.yaml`; esquemas experimentais não fazem parte do bootstrap.
+
 ## Design frontend
 
-`frontend/DESIGN.md` é a fonte visual. `npm run dev` e `npm run build` validam e exportam tokens para `frontend/src/design-theme.css`; não edite esse arquivo gerado manualmente.
+`frontend/DESIGN.md` é a fonte visual. `npm run dev` e `npm run build` validam
+os tokens e geram `frontend/src/design-theme.css`, que é ignorado pelo Git; não
+edite nem versione esse arquivo.
 
 Validação manual:
 

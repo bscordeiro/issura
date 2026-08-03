@@ -9,6 +9,8 @@ source code are never promoted to rules.
   — source: `.gitattributes`.
 - Use `frontend/DESIGN.md` as frontend visual source, including its
   accessibility and interaction rules — source: `README.md`.
+- Format Java with Spring Java Format and other supported project files with
+  Prettier — sources: `backend/pom.xml`, `.prettierrc.json`, and root `package.json`.
 
 ## Linting and Types
 
@@ -17,17 +19,20 @@ source code are never promoted to rules.
 - Enforced by TypeScript compiler for application and Vite configuration
   — sources: `frontend/tsconfig.app.json`, `frontend/tsconfig.node.json`.
 
+## Module Contract
+
+- Backend business code belongs to direct-child capability packages; global
+  technical-layer packages remain forbidden — source: `backend/src/test/java/com/github/bscordeiro/issura/ArchitectureTests.java`.
+- Keep public module types in the capability package root and implementation
+  details in subpackages; Spring Modulith verifies cross-module access
+  — source: `backend/src/test/java/com/github/bscordeiro/issura/ArchitectureTests.java`.
+
 ## Testing
 
 - Run Spring Modulith and ArchUnit architecture checks with the backend test
   suite — source: `backend/src/test/java/com/github/bscordeiro/issura/ArchitectureTests.java`.
 - Verify generated OpenAPI JSON and YAML contracts through MVC integration
   tests — source: `backend/src/test/java/com/github/bscordeiro/issura/OpenApiContractTests.java`.
-
-## Commits and Workflow
-
-- Use OpenSpec to organize specifications, changes, and development tasks
-  — source: `README.md`.
 
 ## Not established
 

@@ -2,30 +2,25 @@
 
 ## Project essentials
 
-- Stack: Java 21, Spring Boot 4.1.0, Spring Modulith 2.1.0,
-  springdoc-openapi 3.0.3, React 19, TypeScript 6, Vite 8, and MariaDB
-  12.3 via Docker Compose.
-- Toolchain: Node 22.23.1 and npm 10.9.8, pinned at the repository root.
-- Package manager: Maven Wrapper 3.9.16 (`backend`) and npm with lockfile
-  v3 at the root (OpenSpec) and in `frontend`.
-- Detail files: `CONTEXT.md` (snapshot, project map, durable decisions),
-  `CONVENTIONS.md` (engineering rules). Read `CONTEXT.md` before
+- `CONTEXT.md` is the canonical stack, version, project-map, and durable-decision
+  snapshot. Dependency manifests and lockfiles remain authoritative.
+- `CONVENTIONS.md` contains enforced engineering rules. Read both files before
   non-trivial work.
+- Workspaces: Maven Wrapper in `backend`, npm at the root for repository tooling,
+  and npm in `frontend`.
 
 ## Commands
 
-- Root tool install: `npm ci`
+- Install tools and frontend dependencies: `npm ci && npm --prefix frontend ci`
+- Full repository verification: `npm run check` (`lint` → `audit` → `sast` → `test`)
+  and the same four gates individually with `npm run <gate>`.
+- Apply deterministic formatting: `npm run format`
 - OpenSpec: `npm run openspec -- <command>`
-- Backend tests: `cd backend && ./mvnw test`
 - Backend development: `cd backend && ./mvnw spring-boot:run`
-- Backend build: `cd backend && ./mvnw verify`
-- Frontend install: `cd frontend && npm ci`
-- Frontend development: `cd frontend && npm run dev`
-- Frontend build and type check: `cd frontend && npm run build`
-- Frontend lint: `cd frontend && npm run lint`
-- Frontend preview: `cd frontend && npm run preview`
-- Not detected: root aggregate command, backend lint command,
-  or frontend test command.
+- Frontend development: `npm --prefix frontend run dev`
+- Targeted backend verification: `npm run check:backend`
+- Targeted frontend verification: `npm run check:frontend`
+- Not established: a frontend test command.
 
 ## Working rules
 

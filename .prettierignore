@@ -1,0 +1,10 @@
+.git/
+.serena/
+**/node_modules/
+**/target/
+**/dist/
+**/package-lock.json
+backend/mvnw
+backend/mvnw.cmd
+frontend/DESIGN.md
+frontend/src/design-theme.css

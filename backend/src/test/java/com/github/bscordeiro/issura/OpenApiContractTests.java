@@ -26,8 +26,7 @@ class OpenApiContractTests {
 	@ParameterizedTest
 	@ValueSource(strings = { "/v3/api-docs", "/v3/api-docs.yaml" })
 	void requiresAuthenticationToReadOpenApiContract(String contractPath) throws Exception {
-		mockMvc.perform(get(contractPath).accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isUnauthorized());
+		mockMvc.perform(get(contractPath).accept(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized());
 	}
 
 	@Test
